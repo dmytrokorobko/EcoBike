@@ -60,6 +60,7 @@ public class Main {
 
         boolean isStop = false;
         while (!isStop) {
+            //region menu items
             System.out.println("1 - Show the entire EcoBike catalog");
             System.out.println("2 - Add a new folding bike");
             System.out.println("3 - Add a new speedelect");
@@ -67,6 +68,7 @@ public class Main {
             System.out.println("5 - Find the first item of a particular brand");
             System.out.println("6 - Write to file");
             System.out.println("7 - Stop the program");
+            //endregion
 
             int num = -1;
             try {
@@ -88,6 +90,7 @@ public class Main {
                     break;
 
                 case 2:
+                    //region input
                     System.out.print("Enter brand: ");
                     String brand = reader.readLine();
                     System.out.print("Enter size of wheels: ");
@@ -102,10 +105,12 @@ public class Main {
                     String color = reader.readLine();
                     System.out.print("Enter price: ");
                     String price = reader.readLine();
+                    //endregion
                     foldingBikeList.addOne(brand, size, gears, weight, light, color, price);
                     break;
 
                 case 3:
+                    //region input
                     System.out.print("Enter brand: ");
                     brand = reader.readLine();
                     System.out.print("Enter maximum speed: ");
@@ -120,10 +125,12 @@ public class Main {
                     color = reader.readLine();
                     System.out.print("Enter price: ");
                     price = reader.readLine();
+                    //endregion
                     speedelectBikeList.addOne(brand, speed, weight, light, battery, color, price);
                     break;
 
                 case 4:
+                    //region input
                     System.out.print("Enter brand: ");
                     brand = reader.readLine();
                     System.out.print("Enter maximum speed: ");
@@ -138,6 +145,7 @@ public class Main {
                     color = reader.readLine();
                     System.out.print("Enter price: ");
                     price = reader.readLine();
+                    //endregion
                     ebikeList.addOne(brand, speed, weight, light, battery, color, price);
                     break;
 
@@ -147,8 +155,7 @@ public class Main {
                     break;
 
                 case 6:
-                    String filename = "";
-                    writeToFile(filename);
+                    writeToFile();
                     break;
 
                 case 7:
@@ -183,8 +190,32 @@ public class Main {
         return null;
     }
 
-    private static void writeToFile(String filename) {
+    private static void writeToFile() {
+        try {
+            String path = System.getProperty("user.dir") + File.separator + FILENAME;
+            FileWriter fileWriter = new FileWriter(path);
+            for(FoldingBike b : foldingBikeList.getAll()) {
+                String light = b.isLight() ? "true" : "false";
+                fileWriter.write(FOLDING + " " + b.getBrand() + "; " + b.getWheelSize() + "; " + b.getGears() + "; " +
+                        b.getWeight() + "; " + light + "; " + b.getColor() + "; " + b.getPrice() + "\n");
+            }
 
+            for(Speedelect b : speedelectBikeList.getAll()) {
+                String light = b.isLight() ? "true" : "false";
+                fileWriter.write(SPEEDLEC + " " + b.getBrand() + "; " + b.getSpeed() + "; " + b.getWeight() + "; " +
+                        light + "; " + b.getBatCapacity() + "; " + b.getColor() + "; " + b.getPrice() + "\n");
+            }
+
+            for(Ebike b : ebikeList.getAll()) {
+                String light = b.isLight() ? "true" : "false";
+                fileWriter.write(EBIKE + " " + b.getBrand() + "; " + b.getSpeed() + "; " + b.getWeight() + "; " +
+                        light + "; " + b.getBatCapacity() + "; " + b.getColor() + "; " + b.getPrice() + "\n");
+            }
+            fileWriter.close();
+            System.out.println("All data has written to file: " + path + " successfully");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

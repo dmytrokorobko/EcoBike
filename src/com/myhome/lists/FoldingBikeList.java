@@ -39,7 +39,7 @@ public class FoldingBikeList {
                 brand,
                 Double.parseDouble(size.trim()),
                 Byte.parseByte(gears.trim()),
-                Integer.parseInt(weight.trim()),
+                Double.parseDouble(weight.trim()),
                 light.trim().equals("true") ? true : false,
                 color.trim(),
                 BigDecimal.valueOf(Long.parseLong(price.trim()))
