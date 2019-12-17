@@ -150,7 +150,7 @@ public class Main {
                     break;
 
                 case 5:
-                    String brandName = "";
+                    String brandName = reader.readLine();
                     findBike(brandName);
                     break;
 
