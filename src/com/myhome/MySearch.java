@@ -11,6 +11,10 @@ public class MySearch extends Thread {
     public MySearch() {
     }
 
+    //добавлен новый метод поиска
+    public EvgenSearch() {
+    }
+
     public void setSearchLine(String searchLine) {
         this.searchLine = searchLine;
     }
