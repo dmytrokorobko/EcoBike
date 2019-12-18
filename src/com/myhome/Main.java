@@ -9,9 +9,9 @@ import java.util.List;
 public class Main {
     private static final String FILENAME = "ecobike.txt";
     private static final String SPLIT_SEP = ";";
-    private static final String SPEEDLEC = "SPEEDELEC";
-    private static final String FOLDING = "FOLDING BIKE";
-    private static final String EBIKE = "E-BIKE";
+    public static final String SPEEDLEC = "SPEEDELEC";
+    public static final String FOLDING = "FOLDING BIKE";
+    public static final String EBIKE = "E-BIKE";
 
     public static List<Bikes> bikesList = new ArrayList<>();
     public static boolean isSearching;
@@ -43,9 +43,9 @@ public class Main {
             }
             System.out.println("Imported " + i + " lines from file");
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("Such file wasn't found");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Such file wasn't found");
         }
     }
 
@@ -68,17 +68,18 @@ public class Main {
             try {
                 System.out.print("Make your choice: ");
                 num = Integer.parseInt(reader.readLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Enter correct number");
             } catch (IOException e) {
-                e.printStackTrace();
                 System.out.println("Enter correct number");
             }
 
             if (num < 1 || num > 7) {
-                System.out.println("Enter correct number");
+                System.out.println("Enter correct number in range between 1  and 7");
                 continue;
             }
 
-            if ((num == 3 || num == 4 || num == 5) && isSearching ) {
+            if ((num == 2 || num == 3 || num == 4) && isSearching ) {
                 System.out.println("You can't add new items while searching! Please try later.");
                 continue;
             }
@@ -149,6 +150,7 @@ public class Main {
                     break;
 
                 case 5:
+                    System.out.print("Enter search line: ");
                     String brandName = reader.readLine();
                     findBike(brandName);
                     break;
@@ -175,8 +177,10 @@ public class Main {
         System.out.println("Shown " + i + " items.");
     }
 
-    private static Bike findBike(String string) {
-        return null;
+    private static void findBike(String string) {
+        MySearch search = new MySearch();
+        search.setSearchLine(string);
+        search.start();
     }
 
     private static void writeToFile() {
@@ -206,7 +210,7 @@ public class Main {
             fileWriter.close();
             System.out.println("All data has written to file: " + path + " successfully");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Data wasn't written to file");
         }
     }
 

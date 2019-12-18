@@ -44,7 +44,7 @@ public class FoldingBike extends Bike implements Bikes {
 
     @Override
     public boolean equals(Object obj) {
-        return false;
+        return this.getBrand().contains((String) obj);
     }
 
     @Override
