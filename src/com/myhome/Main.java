@@ -1,11 +1,10 @@
 package com.myhome;
 
-import com.myhome.lists.EbikeList;
-import com.myhome.lists.FoldingBikeList;
-import com.myhome.lists.SpeedelectBikeList;
 import com.myhome.models.*;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
     private static final String FILENAME = "ecobike.txt";
@@ -14,16 +13,10 @@ public class Main {
     private static final String FOLDING = "FOLDING BIKE";
     private static final String EBIKE = "E-BIKE";
 
-    static SpeedelectBikeList speedelectBikeList;
-    static FoldingBikeList foldingBikeList;
-    static EbikeList ebikeList;
+    private static List<Bikes> bikesList = new ArrayList<>();
 
 
     public static void main(String[] args) throws IOException {
-        speedelectBikeList = SpeedelectBikeList.getInstance();
-        foldingBikeList = FoldingBikeList.getInstance();
-        ebikeList = EbikeList.getInstance();
-
         readDataFromFile(null);
         showMenu();
     }
@@ -31,19 +24,20 @@ public class Main {
     private static void readDataFromFile(String currentPath) {
         String pathToFile = System.getProperty("user.dir") + File.separator + FILENAME;
         if (currentPath != null) pathToFile = currentPath;
+
         try(BufferedReader reader = new BufferedReader(new FileReader(pathToFile))) {
             String line;
-            long i = 0; //count imported data
+            long i = 0; //count of imported data
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(SPLIT_SEP);
                 if (data[0].contains(SPEEDLEC + " ")) {
-                    speedelectBikeList.addOne(data[0].substring(SPEEDLEC.length()), data[1], data[2], data[3], data[4], data[5], data[6]);
+                    bikesList.add(new Speedelect(data[0].substring(SPEEDLEC.length()), data[1], data[2], data[3], data[4], data[5], data[6]));
                     i++;
                 } else if (data[0].contains(FOLDING + " ")) {
-                    foldingBikeList.addOne(data[0].substring(FOLDING.length()), data[1], data[2], data[3], data[4], data[5], data[6]);
+                    bikesList.add(new FoldingBike(data[0].substring(FOLDING.length()), data[1], data[2], data[3], data[4], data[5], data[6]));
                     i++;
                 } else if (data[0].contains(EBIKE + " ")) {
-                    ebikeList.addOne(data[0].substring(EBIKE.length()), data[1], data[2], data[3], data[4], data[5], data[6]);
+                    bikesList.add(new Ebike(data[0].substring(EBIKE.length()), data[1], data[2], data[3], data[4], data[5], data[6]));
                     i++;
                 }
             }
@@ -106,7 +100,7 @@ public class Main {
                     System.out.print("Enter price: ");
                     String price = reader.readLine();
                     //endregion
-                    foldingBikeList.addOne(brand, size, gears, weight, light, color, price);
+                    bikesList.add(new FoldingBike(brand, size, gears, weight, light, color, price));
                     break;
 
                 case 3:
@@ -126,7 +120,7 @@ public class Main {
                     System.out.print("Enter price: ");
                     price = reader.readLine();
                     //endregion
-                    speedelectBikeList.addOne(brand, speed, weight, light, battery, color, price);
+                    bikesList.add(new Speedelect(brand, speed, weight, light, battery, color, price));
                     break;
 
                 case 4:
@@ -146,7 +140,7 @@ public class Main {
                     System.out.print("Enter price: ");
                     price = reader.readLine();
                     //endregion
-                    ebikeList.addOne(brand, speed, weight, light, battery, color, price);
+                    bikesList.add(new Ebike(brand, speed, weight, light, battery, color, price));
                     break;
 
                 case 5:
@@ -169,17 +163,7 @@ public class Main {
 
     private static void showAllBikes() {
         int i = 0;
-        for(Bike b : foldingBikeList.getAll()) {
-            System.out.println(b.toString());
-            i++;
-        }
-
-        for(Bike b : speedelectBikeList.getAll()) {
-            System.out.println(b.toString());
-            i++;
-        }
-
-        for(Bike b : ebikeList.getAll()) {
+        for(Bikes b : bikesList) {
             System.out.println(b.toString());
             i++;
         }
@@ -194,22 +178,25 @@ public class Main {
         try {
             String path = System.getProperty("user.dir") + File.separator + FILENAME;
             FileWriter fileWriter = new FileWriter(path);
-            for(FoldingBike b : foldingBikeList.getAll()) {
-                String light = b.isLight() ? "true" : "false";
-                fileWriter.write(FOLDING + " " + b.getBrand() + "; " + b.getWheelSize() + "; " + b.getGears() + "; " +
-                        b.getWeight() + "; " + light + "; " + b.getColor() + "; " + b.getPrice() + "\n");
-            }
 
-            for(Speedelect b : speedelectBikeList.getAll()) {
-                String light = b.isLight() ? "true" : "false";
-                fileWriter.write(SPEEDLEC + " " + b.getBrand() + "; " + b.getSpeed() + "; " + b.getWeight() + "; " +
-                        light + "; " + b.getBatCapacity() + "; " + b.getColor() + "; " + b.getPrice() + "\n");
-            }
+            for(Bikes b : bikesList) {
+                String light = ((Bike) b).isLight() ? "true" : "false";
+                if (b instanceof FoldingBike) {
+                    fileWriter.write(FOLDING + " " + ((FoldingBike) b).getBrand() + "; " +
+                            ((FoldingBike) b).getWheelSize() + "; " + ((FoldingBike) b).getGears() + "; " +
+                            ((FoldingBike) b).getWeight() + "; " + light + "; " +
+                            ((FoldingBike) b).getColor() + "; " + ((FoldingBike) b).getPrice() + "\n");
+                } else {
+                    String str = "";
+                    if (b instanceof Speedelect) str += SPEEDLEC + " ";
+                    else str += EBIKE + " ";
+                    str += ((BikeElectric) b).getBrand() + "; " + ((BikeElectric) b).getSpeed() + "; " +
+                            ((BikeElectric) b).getWeight() + "; " + light + "; " +
+                            ((BikeElectric) b).getBatCapacity() + "; " + ((BikeElectric) b).getColor() + "; " +
+                            ((BikeElectric) b).getPrice() + "\n";
+                    fileWriter.write(str);
+                }
 
-            for(Ebike b : ebikeList.getAll()) {
-                String light = b.isLight() ? "true" : "false";
-                fileWriter.write(EBIKE + " " + b.getBrand() + "; " + b.getSpeed() + "; " + b.getWeight() + "; " +
-                        light + "; " + b.getBatCapacity() + "; " + b.getColor() + "; " + b.getPrice() + "\n");
             }
             fileWriter.close();
             System.out.println("All data has written to file: " + path + " successfully");

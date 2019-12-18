@@ -1,7 +1,6 @@
 package com.myhome.lists;
 
 import com.myhome.models.FoldingBike;
-import com.myhome.models.Speedelect;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

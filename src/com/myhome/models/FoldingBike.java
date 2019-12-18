@@ -2,7 +2,7 @@ package com.myhome.models;
 
 import java.math.BigDecimal;
 
-public class FoldingBike extends Bike {
+public class FoldingBike extends Bike implements Bikes {
     private double wheelSize;
     private byte gears;
 
@@ -14,6 +14,16 @@ public class FoldingBike extends Bike {
         setLight(isLight);
         setColor(color);
         setPrice(price);
+    }
+
+    public FoldingBike(String brand, String size, String gears, String weight, String light, String color, String price) {
+        setBrand(brand);
+        this.wheelSize = Double.parseDouble(size.trim());
+        this.gears = Byte.parseByte(gears.trim());
+        setWeight(Double.parseDouble(weight.trim()));
+        setLight(light.trim().equals("true") ? true : false);
+        setColor(color.trim());
+        setPrice(BigDecimal.valueOf(Long.parseLong(price.trim())));
     }
 
     public double getWheelSize() {

@@ -2,7 +2,7 @@ package com.myhome.models;
 
 import java.math.BigDecimal;
 
-public class Ebike extends BikeElectric {
+public class Ebike extends BikeElectric implements Bikes {
     public Ebike(String brand, double speed, double weight, boolean isLight, int batCapacity, String color, BigDecimal price) {
         setBrand(brand);
         setSpeed(speed);
@@ -11,6 +11,16 @@ public class Ebike extends BikeElectric {
         setBatCapacity(batCapacity);
         setColor(color);
         setPrice(price);
+    }
+
+    public Ebike(String brand, String speed, String weight, String light, String battery, String color, String price) {
+        setBrand(brand);
+        setSpeed(Double.parseDouble(speed.trim()));
+        setWeight(Double.parseDouble(weight.trim()));
+        setLight(light.trim().equals("true") ? true : false);
+        setBatCapacity(Integer.parseInt(battery.trim()));
+        setColor(color.trim());
+        setPrice(BigDecimal.valueOf(Long.parseLong(price.trim())));
     }
 
     @Override
