@@ -13,8 +13,8 @@ public class Main {
     private static final String FOLDING = "FOLDING BIKE";
     private static final String EBIKE = "E-BIKE";
 
-    private static List<Bikes> bikesList = new ArrayList<>();
-
+    public static List<Bikes> bikesList = new ArrayList<>();
+    public static boolean isSearching;
 
     public static void main(String[] args) throws IOException {
         readDataFromFile(null);
@@ -75,6 +75,11 @@ public class Main {
 
             if (num < 1 || num > 7) {
                 System.out.println("Enter correct number");
+                continue;
+            }
+
+            if ((num == 3 || num == 4 || num == 5) && isSearching ) {
+                System.out.println("You can't add new items while searching! Please try later.");
                 continue;
             }
 
