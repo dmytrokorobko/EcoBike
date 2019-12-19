@@ -6,10 +6,6 @@ import com.myhome.models.FoldingBike;
 import com.myhome.models.Speedelect;
 
 public class MySearch extends Thread {
-    /*
-    My method of search
-     */
-
     private String searchLine;
 
     public MySearch() {
